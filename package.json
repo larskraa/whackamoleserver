@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "express": "^4.4.5",
-    "ws": "0.4.x"
+    "socket.io": "^1.4.4",
   },
   "engines": {
     "node": "0.10.x"
