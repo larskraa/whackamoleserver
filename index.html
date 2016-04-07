@@ -70,6 +70,10 @@
         socket.emit('start game');
     });
 
+    socket.on('new game error', function (msg) {
+        console.log(msg);
+    });
+
     $('form').submit(function () {
         var val = $('#m').val();
         var split = val.split(',');
