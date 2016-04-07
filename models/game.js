@@ -77,9 +77,8 @@ function sendNewMole()
         return;
     }
     currentMole = {
-        x: getRandomInt(0,2),
-        y: getRandomInt(0,2),
-        hit: false
+        pos: getRandomInt(0,8),
+        hit: fals
     };
     console.log(currentMole);
     io.to(gameName).emit('new mole', currentMole);
