@@ -60,14 +60,49 @@
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
     var socket = io();
+    var x;
+    var y;
+    var gameName = 'myGame1';
+    socket.emit('new game', gameName);
+
+    socket.on('new game success', function (msg) {
+        console.log(msg);
+        socket.emit('start game');
+    });
+
     $('form').submit(function () {
-        socket.emit('chat message', $('#m').val());
+        var val = $('#m').val();
+        var split = val.split(',');
+        if (split[0] == x && split[1] == y){
+            hit();
+        }
         $('#m').val('');
         return false;
     });
-    socket.on('chat message', function (msg) {
-        $('#messages').append($('<li>').text(msg));
+
+
+    socket.on('new mole', function (coord) {
+        x = coord.x;
+        y = coord.y;
+        console.log(coord);
+        $('#messages').append($('<li>').text(coord.x +' '+ coord.y));
     });
+
+    socket.on('start game success', function (msg) {
+        console.log(msg);
+    });
+
+    socket.on('hit success', function (msg) {
+        console.log(msg);
+    });
+
+    socket.on('hit miss', function (msg) {
+        console.log(msg);
+    });
+
+    function hit(){
+        socket.emit('mole hit', gameName);
+    }
 </script>
 </body>
 </html>
