@@ -50,7 +50,15 @@ io.on('connection', function(socket){
     socket.on('new game', function(name){
         if(name.length<3){
             socket.emit('new game error', 'Game name not long enough')
+            return;
         }
+        // Check if game exists
+        var game = getGame(name);
+        if (game !== null){
+            socket.emit('new game error', 'Game with this name already exists')
+            return;
+        }
+
         var creatorId = socket.id;
         game = new Game(name, creatorId);
         games.push(game);
