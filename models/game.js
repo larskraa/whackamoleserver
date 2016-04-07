@@ -4,6 +4,8 @@
 var app = require('../index.js');
 var Attender = require('./attender.js');
 var io = app.io;
+
+
 var attenders = [];
 var masterId;
 var gameName;
@@ -23,29 +25,38 @@ Game.prototype.getName = function() {
     return this.name;
 };
 
-Game.prototype.getNuberOfAttenders = function () {
+Game.prototype.getNuberOfAttenders = function ()
+{
     return  attenders.length;
 };
 
-Game.prototype.getMasterId = function () {
+Game.prototype.getMasterId = function ()
+{
     return masterId;
 };
 
-Game.prototype.joinGame = function (socketId) {
-    var attender = new Attender(socketId, 0);
+Game.prototype.joinGame = function (socketId, nickName)
+{
+    if (nickName == null){
+        nickName = generateRandomNickName();
+    }
+    var attender = new Attender(socketId, nickName, 0);
     attenders.push(attender);
 };
 
-Game.prototype.isFull = function () {
+Game.prototype.isFull = function ()
+{
     return attenders.length > 5
 };
 
-Game.prototype.start = function(){
+Game.prototype.start = function()
+{
     // Start game after 3 seconds
     setTimeout(sendNewMole, 1000);
 };
 
-Game.prototype.registerHit = function (socketId){
+Game.prototype.registerHit = function (socketId)
+{
     if (currentMole.hit === true){
         return false;
     }
@@ -59,7 +70,8 @@ Game.prototype.registerHit = function (socketId){
     }
 };
 
-function sendNewMole(){
+function sendNewMole()
+{
     if(currentMole.hit === false){
         setTimeout(sendNewMole, 500);
         return;
@@ -72,6 +84,17 @@ function sendNewMole(){
     console.log(currentMole);
     io.to(gameName).emit('new mole', currentMole);
     setTimeout(sendNewMole, 500);
+}
+
+function generateRandomNickName()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
 }
 
 /**

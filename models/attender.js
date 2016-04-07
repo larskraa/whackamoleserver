@@ -2,10 +2,11 @@
  * Created by rubenschmidt on 07.04.2016.
  */
 // Constructor
-function Attender(id, points) {
+function Attender(id, nickName ,points) {
     // always initialize all instance properties
     this.id = id;
     this.points = points;
+    this.nickName = nickName;
 }
 // class methods
 //Game.prototype.getId = function() {

@@ -37,25 +37,31 @@ function getGameFromMasterId(masterId){
 
 io.on('connection', function(socket){
 
-    socket.on('join game', function (name) {
-        var game = getGame(name);
+    socket.on('join game', function (data) {
+        var game = getGame(data.gameName);
         if (game === null){
-            socket.emit('join game error', 'Game does not exist!')
+            socket.emit('join game error', 'Game does not exist!');
+            return;
+        }
+        if(game.isFull()){
+            socket.emit('join game error', 'Game is full!');
+            return;
         }
 
-        game.joinGame(socket.id);
+        game.joinGame(socket.id, data.nickName);
+        // Join the user socket to the room specific to the game so it receives game updates.
         socket.join(game.getName());
     });
 
     socket.on('new game', function(name){
         if(name.length<3){
-            socket.emit('new game error', 'Game name not long enough')
+            socket.emit('new game error', 'Game name not long enough');
             return;
         }
         // Check if game exists
         var game = getGame(name);
         if (game !== null){
-            socket.emit('new game error', 'Game with this name already exists')
+            socket.emit('new game error', 'Game with this name already exists');
             return;
         }
 
