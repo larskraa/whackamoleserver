@@ -78,10 +78,10 @@ function sendNewMole()
     }
     currentMole = {
         pos: getRandomInt(0,8),
-        hit: fals
+        hit: false
     };
     console.log(currentMole);
-    io.to(gameName).emit('new mole', currentMole);
+    io.to(gameName).emit('new mole', JSON.stringify(currentMole));
     setTimeout(sendNewMole, 500);
 }
 
